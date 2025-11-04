@@ -1,0 +1,42 @@
+<ion-content>
+  <ion-list class="poke-list" inset="true">
+
+    <ion-item
+      class="poke-item"
+      lines="none"
+      *ngFor="let p of items; trackBy: trackById"
+      (click)="goToDetail(p)"
+    >
+      <ion-avatar slot="start" class="poke-avatar">
+        <img [src]="p.sprites?.front_default || ''" [alt]="p.name" />
+      </ion-avatar>
+
+      <ion-label class="poke-label">
+        <span class="name">{{ p.name | titlecase }}</span>
+        <div class="types">
+          <ion-chip *ngFor="let t of p.types" [class]="typeClass(t.type.name)" size="small">
+            <ion-label>{{ t.type.name | uppercase }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-label>
+
+      <ion-buttons slot="end" class="actions" (click)="$event.stopPropagation()">
+        <ion-button class="btn-ghost" size="small" fill="clear" aria-label="Favorito"
+                    (click)="/* tu toggleFav(p.id) si lo tienes */">
+          <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
+        </ion-button>
+        <ion-button class="btn-primary" size="small" aria-label="Ver detalle"
+                    (click)="goToDetail(p)">
+          <ion-icon slot="icon-only" name="information-circle"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll (ionInfinite)="getMorePokemons($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más Pokémon...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+  </ion-list>
+</ion-content>

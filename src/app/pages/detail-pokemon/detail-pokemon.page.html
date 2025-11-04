@@ -1,0 +1,72 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/list-pokemons"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ng-container *ngIf="loading(); else ready">
+    <div style="padding:16px;">Cargando...</div>
+  </ng-container>
+
+  <ng-template #ready>
+    <ng-container *ngIf="pokemon() as p; else empty">
+      <div class="hero">
+        <img [src]="imgOf(p)" [alt]="p.name" />
+      </div>
+
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="type-row">
+            <ion-chip *ngFor="let t of p.types" [class]="typeClass(t.type.name)">
+              <ion-label>{{ t.type.name | uppercase }}</ion-label>
+            </ion-chip>
+          </div>
+
+          <div class="info-grid">
+            <div>
+              <strong>Peso</strong>
+              <div>{{ (p.weight ?? 0) / 10 | number:'1.0-1' }} kg</div>
+            </div>
+            <div>
+              <strong>Altura</strong>
+              <div>{{ (p.height ?? 0) / 10 | number:'1.0-1' }} m</div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header><ion-card-title>Habilidades</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <div class="abilities">
+            <span *ngFor="let a of p.abilities">{{ a.ability.name }}</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header><ion-card-title>Estadísticas</ion-card-title></ion-card-header>
+        <ion-card-content>
+          <div class="stat" *ngFor="let s of p.stats">
+            <div class="name">{{ s.stat.name }}</div>
+            <div class="bar"><div class="fill" [style.width.%]="statPercent(s.base_stat)"></div></div>
+            <div class="value">{{ s.base_stat }}</div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+
+    <ng-template #empty>
+      <div style="padding:16px;">No se encontró el Pokémon. <a (click)="goBack()">Volver</a></div>
+    </ng-template>
+  </ng-template>
+
+</ion-content>

@@ -1,0 +1,95 @@
+@use '../../../theme/poke-shared' as *; /* si ya no lo usas, puedes quitarlo */
+
+/* ======== Ajustes globales del card ======== */
+:host {
+  --card-bg: var(--surface, #fff);
+  --card-shadow: var(--surface-shadow, 0 8px 24px rgba(16,24,40,.06));
+  --card-radius: var(--surface-radius, 16px);
+  --accent: var(--ion-color-primary, #e15757);
+  --text-strong: var(--text-800, #1f2937);
+  --text-soft: var(--text-600, #475569);
+  --chip-stroke: #a3a3a3; /* gris de borde para la cápsula tipo */
+}
+
+/* lista y card */
+.poke-list { padding: 12px; }
+
+ion-content {
+  --background: #f6f7fb;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+.poke-item {
+  margin: 10px 0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(16,24,40,.06);
+  --background: transparent;
+  --padding-start: 12px;
+  --inner-padding-end: 8px;
+  min-height: 74px;
+
+  display: flex;
+  align-items: center;
+}
+
+.poke-avatar img {
+  width: 44px; height: 44px; object-fit: contain;
+}
+
+.poke-label {
+  display: flex; align-items: center;
+  gap: 12px; min-height: 44px;
+}
+
+/* nombre + chips */
+.name { font-size: 15.5px; font-weight: 600; color: #1f2937; }
+.types { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* chips pastel (ya los traes; dejo por si falta) */
+ion-chip {
+  height: 22px; border-radius: 999px; padding: 0 8px;
+  --background: #eef2f7; --color: #1f2937;
+  ion-label { font-size: 10.5px; font-weight: 700; letter-spacing: .4px; }
+}
+
+/* ===== Botones a la derecha (alineados, discretos) ===== */
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;        /* separa botones del label */
+}
+
+/* botón fantasma (favorito) */
+.btn-ghost {
+  --padding-start: 6px; --padding-end: 6px;
+  --background: transparent;
+  --box-shadow: none;
+  color: #94a3b8;          /* slate-400 */
+}
+.btn-ghost:hover { color: var(--ion-color-primary); }
+
+/* botón principal info (suave, redondito) */
+.btn-primary {
+  --padding-start: 8px; --padding-end: 8px;
+  --border-radius: 12px;
+  --background: color-mix(in srgb, var(--ion-color-primary) 86%, white 14%);
+  --background-hover: color-mix(in srgb, var(--ion-color-primary) 92%, white 8%);
+  --box-shadow: 0 4px 10px rgba(0,0,0,.08);
+  --color: #fff;
+}
+
+/* iconos más pequeños para que no “pesen” */
+ion-buttons .ion-activatable, .actions ion-button {
+  height: 28px; min-height: 28px;
+}
+.actions ion-icon { font-size: 16px; }
+
+/* móvil muy chico: que el label pueda saltar a 2 líneas si no cabe */
+@media (max-width: 360px) {
+  .poke-label { flex-wrap: wrap; gap: 6px 10px; }
+}

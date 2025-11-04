@@ -1,0 +1,24 @@
+:root {
+  /* 🎨 Paleta Pokedex Soft */
+  --ion-color-primary: #e15757;  /* Rojo coral suave */
+  --ion-color-primary-contrast: #ffffff;
+
+  --ion-color-secondary: #ffdf6b;
+  --ion-color-secondary-contrast: #1e293b;
+
+  --ion-color-medium: #6c7fa0;
+  --ion-color-light: #f8fafc;
+
+  --app-bg: var(--ion-color-light);
+  --surface: #ffffff;
+  --surface-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --surface-radius: 16px;
+
+  --text-900: #1e293b;
+  --text-700: #334155;
+  --text-500: #64748b;
+}
+
+ion-content {
+  --background: var(--app-bg);
+}

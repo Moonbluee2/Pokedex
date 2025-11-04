@@ -1,0 +1,18 @@
+@use '../../../theme/poke-shared' as *;
+
+.hero { display:grid; place-items:center; padding:16px 0; }
+.hero img { width:180px; height:180px; object-fit:contain; }
+
+ion-card { background: var(--surface); box-shadow: var(--surface-shadow); border-radius: var(--surface-radius); }
+ion-card-title { color: var(--text-800); }
+
+.info-grid {
+  display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin-top:8px;
+  div { background:#f3f4f6; border-radius:10px; padding:10px; text-align:center; }
+  strong { display:block; font-size:.85rem; color:#6b7280; margin-bottom:4px; }
+}
+
+.stat{ display:grid; grid-template-columns: 60px 1fr 40px; align-items:center; gap:10px; margin:8px 0; }
+.stat .name{ text-transform: lowercase; color:#6b7280; }
+.stat .bar{ height:8px; background:#eee; border-radius:999px; overflow:hidden; }
+.stat .fill{ height:100%; background: var(--ion-color-primary); opacity:.45; }
