@@ -1,42 +1,42 @@
-<ion-content>
-  <ion-list class="poke-list" inset="true">
+<ion-header>
+  <ion-toolbar class="pdx-toolbar">
+    <ion-title>Pokedex</ion-title>
+  </ion-toolbar>
+</ion-header>
 
+<ion-content>
+  <ion-list class="pdx-list">
     <ion-item
-      class="poke-item"
+      *ngFor="let p of items()"
+      button
       lines="none"
-      *ngFor="let p of items; trackBy: trackById"
-      (click)="goToDetail(p)"
+      (click)="goDetail(p)"
+      class="pdx-card"
     >
+      <!-- Avatar a la izquierda -->
       <ion-avatar slot="start" class="poke-avatar">
-        <img [src]="p.sprites?.front_default || ''" [alt]="p.name" />
+        <img [src]="img(p.id)" [alt]="p.name" />
       </ion-avatar>
 
-      <ion-label class="poke-label">
-        <span class="name">{{ p.name | titlecase }}</span>
-        <div class="types">
-          <ion-chip *ngFor="let t of p.types" [class]="typeClass(t.type.name)" size="small">
-            <ion-label>{{ t.type.name | uppercase }}</ion-label>
-          </ion-chip>
+      <!-- Contenido: nombre centrado y chips a la derecha -->
+      <ion-label class="main">
+        <div class="row">
+          <div class="title">{{ p.name | titlecase }}</div>
+          <div class="chips">
+            <ion-chip *ngFor="let t of p.types" [class]="'type-' + t.type.name">
+              <ion-label>{{ t.type.name | uppercase }}</ion-label>
+            </ion-chip>
+          </div>
         </div>
       </ion-label>
 
-      <ion-buttons slot="end" class="actions" (click)="$event.stopPropagation()">
-        <ion-button class="btn-ghost" size="small" fill="clear" aria-label="Favorito"
-                    (click)="/* tu toggleFav(p.id) si lo tienes */">
-          <ion-icon slot="icon-only" name="heart-outline"></ion-icon>
-        </ion-button>
-        <ion-button class="btn-primary" size="small" aria-label="Ver detalle"
-                    (click)="goToDetail(p)">
-          <ion-icon slot="icon-only" name="information-circle"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
     </ion-item>
-
-    <!-- Infinite Scroll -->
-    <ion-infinite-scroll (ionInfinite)="getMorePokemons($event)">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Cargando más Pokémon...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-
   </ion-list>
+
+  <div class="load-more">
+    <ion-button (click)="load()" [disabled]="loading()">
+      {{ loading() ? 'Cargando...' : 'Cargar más' }}
+    </ion-button>
+  </div>
 </ion-content>

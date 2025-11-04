@@ -1,13 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/list-pokemons"></ion-back-button>
-    </ion-buttons>
     <ion-title>Detalle</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-fab slot="fixed" vertical="top" horizontal="end">
+    <ion-fab-button color="primary" (click)="goBack()">
+      <ion-icon name="close"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
   <ng-container *ngIf="loading(); else ready">
     <div style="padding:16px;">Cargando...</div>
@@ -25,19 +27,27 @@
         </ion-card-header>
         <ion-card-content>
           <div class="type-row">
-            <ion-chip *ngFor="let t of p.types" [class]="typeClass(t.type.name)">
+            <ion-chip *ngFor="let t of p.types" [class]="'type-' + t.type.name">
               <ion-label>{{ t.type.name | uppercase }}</ion-label>
             </ion-chip>
           </div>
 
           <div class="info-grid">
             <div>
+              <strong>Tipo</strong>
+              <div>
+                <ion-chip *ngFor="let t of p.types" size="small" [class]="'type-' + t.type.name">
+                  <ion-label>{{ t.type.name | uppercase }}</ion-label>
+                </ion-chip>
+              </div>
+            </div>
+            <div>
               <strong>Peso</strong>
-              <div>{{ (p.weight ?? 0) / 10 | number:'1.0-1' }} kg</div>
+              <div>{{ (p.weight / 10) | number:'1.0-1' }}</div>
             </div>
             <div>
               <strong>Altura</strong>
-              <div>{{ (p.height ?? 0) / 10 | number:'1.0-1' }} m</div>
+              <div>{{ (p.height / 10) | number:'1.0-1' }}</div>
             </div>
           </div>
         </ion-card-content>
@@ -47,7 +57,10 @@
         <ion-card-header><ion-card-title>Habilidades</ion-card-title></ion-card-header>
         <ion-card-content>
           <div class="abilities">
-            <span *ngFor="let a of p.abilities">{{ a.ability.name }}</span>
+            <div class="ability" *ngFor="let a of p.abilities">
+              <span class="tag" [class.hidden]="a.is_hidden">{{ a.is_hidden ? 'Oculta' : 'Principal' }}</span>
+              <span class="name">{{ a.ability.name }}</span>
+            </div>
           </div>
         </ion-card-content>
       </ion-card>
@@ -68,5 +81,4 @@
       <div style="padding:16px;">No se encontró el Pokémon. <a (click)="goBack()">Volver</a></div>
     </ng-template>
   </ng-template>
-
 </ion-content>

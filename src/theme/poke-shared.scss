@@ -1,24 +1,36 @@
-/* base chip */
-ion-chip{
-  height:22px;border-radius:999px;--background:#eef2f7;--color:#1f2937;padding:0 8px;
-  ion-label{font-size:10.5px;font-weight:700;letter-spacing:.4px}
+:root {
+  --surface: #ffffff;
+  --surface-shadow: 0 1px 2px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
+  --surface-radius: 12px;
+  --text-800: #1f2937;
 }
 
-/* pastel combinando con primario morado */
-.chip-grass   { --background:#eaf8ee; --color:#12673a; }
-.chip-poison  { --background:#efe6ff; --color:#6a3aa1; } /* 💜 */
-.chip-fire    { --background:#ffe8df; --color:#a33b14; }
-.chip-water   { --background:#e7f2ff; --color:#0d4f73; }
-.chip-flying  { --background:#eef6ff; --color:#334155; }
-.chip-bug     { --background:#edf7de; --color:#3e5a13; }
-.chip-electric{ --background:#fff6cc; --color:#9a7b00; }
-.chip-normal  { --background:#f3f4f6; --color:#374151; }
-.chip-fairy   { --background:#ffe6f1; --color:#9a2978; }
-.chip-psychic { --background:#ffd9ec; --color:#7a1a4b; }
-.chip-ice     { --background:#e7faff; --color:#1e5670; }
-.chip-rock    { --background:#eee3d4; --color:#5a4330; }
-.chip-dragon  { --background:#e9e7ff; --color:#3c38a6; } /* 💜 */
-.chip-ghost   { --background:#efeaff; --color:#4338ca; } /* 💜 */
-.chip-steel   { --background:#edf2f7; --color:#334155; }
-.chip-dark    { --background:#eaeaea; --color:#111827; }
-.chip-ground  { --background:#f7e4cf; --color:#7a4b1a; }
+/* Colores por tipo para chips */
+$type-colors: (
+  normal: #a8a77a,
+  fire: #ee8130,
+  water: #6390f0,
+  electric: #f7d02c,
+  grass: #7ac74c,
+  ice: #96d9d6,
+  fighting: #c22e28,
+  poison: #a33ea1,
+  ground: #e2bf65,
+  flying: #a98ff3,
+  psychic: #f95587,
+  bug: #a6b91a,
+  rock: #b6a136,
+  ghost: #735797,
+  dragon: #6f35fc,
+  dark: #705746,
+  steel: #b7b7ce,
+  fairy: #d685ad
+);
+
+@each $name, $color in $type-colors {
+  .type-#{$name} {
+    --background: #{$color};
+    background: #{$color};
+    color: #fff;
+  }
+}

@@ -6,10 +6,21 @@
 ion-card { background: var(--surface); box-shadow: var(--surface-shadow); border-radius: var(--surface-radius); }
 ion-card-title { color: var(--text-800); }
 
+.type-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+ion-chip { --color:#fff; font-weight:600; }
+
 .info-grid {
   display:grid; grid-template-columns: repeat(2,1fr); gap:12px; margin-top:8px;
   div { background:#f3f4f6; border-radius:10px; padding:10px; text-align:center; }
   strong { display:block; font-size:.85rem; color:#6b7280; margin-bottom:4px; }
+}
+
+.abilities {
+  display:grid; gap:8px;
+  .ability { display:flex; align-items:center; gap:8px; }
+  .tag { font-size:.7rem; padding:2px 8px; border-radius:999px; background:#e5e7eb; color:#374151; text-transform:uppercase; }
+  .tag.hidden { background:#fee2e2; color:#991b1b; }
+  .name { text-transform: lowercase; }
 }
 
 .stat{ display:grid; grid-template-columns: 60px 1fr 40px; align-items:center; gap:10px; margin:8px 0; }

@@ -1,12 +1,13 @@
-import { SPokemonService } from '../../services/spokemon';         // ← OJO: sin ".service"
-import { IPokemon } from '../../interfaces/pokemon';               // ← OJO: sin ".interface"
-
+import { Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import {
-  IonContent, IonList, IonItem, IonAvatar, IonLabel, IonChip,
-  IonButtons, IonButton, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent
+  IonHeader, IonToolbar, IonTitle, IonContent, IonList, IonItem, IonLabel,
+  IonButton, IonAvatar, IonIcon, IonChip
 } from '@ionic/angular/standalone';
-import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SPokemonService, PokemonListItem } from '../../services/spokemon';
+import { addIcons } from 'ionicons';
+import { chevronForward } from 'ionicons/icons';
 
 @Component({
   standalone: true,
@@ -14,34 +15,54 @@ import { Router } from '@angular/router';
   templateUrl: './list-pokemons.page.html',
   styleUrls: ['./list-pokemons.page.scss'],
   imports: [
-    IonContent, IonList, IonItem, IonAvatar, IonLabel, IonChip,
-    IonButtons, IonButton, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent
+    CommonModule,
+    IonHeader, IonToolbar, IonTitle, IonContent,
+    IonList, IonItem, IonLabel, IonButton, IonAvatar, IonIcon, IonChip
   ],
 })
 export class ListPokemonsPage {
-  items: IPokemon[] = [];
+  items = signal<PokemonListItem[]>([]);
   offset = 0;
+  limit = 20;
+  loading = signal(false);
 
-  constructor(private sPokemon: SPokemonService, private router: Router) {}
-
-  async ngOnInit() {
-    await this.loadMore();
+  constructor(private api: SPokemonService, private router: Router) {
+    addIcons({ chevronForward });
+    this.load();
   }
 
-  async loadMore() {
-    const chunk = await this.sPokemon.getPokemons(this.offset, 20);
-    this.items.push(...chunk);
+  async load() {
+    if (this.loading()) return;
+    this.loading.set(true);
+
+    // 1) Trae la página de resultados
+    const batch = await this.api.getPokemons(this.offset, this.limit); // PokemonListItem[]
+
+    // 2) Completa los "types" de cada item (sin cambiar su tipo)
+    await Promise.all(
+      batch.map(async (p) => {
+        try {
+          const d = await this.api.getPokemon(p.id);
+          p.types = d?.types ?? [];
+        } catch {
+          p.types = [];
+        }
+      })
+    );
+
+    // 3) Actualiza la señal respetando el tipo PokemonListItem[]
+    this.items.update(prev => ([...prev, ...batch]));
+    this.offset += this.limit;
+    this.loading.set(false);
   }
 
-  async getMorePokemons(ev: Event) {
-    this.offset += 20;
-    await this.loadMore();
-    (ev.target as HTMLIonInfiniteScrollElement).complete();
+  img(id: number) {
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
   }
 
-  goToDetail(p: IPokemon) {
-    this.router.navigate(['/detail-pokemon', p.id]);
-  }
+  typeClass(name: string) { return `type-${name}`; }
 
-  trackById(_i: number, x: IPokemon) { return x.id; }
+  goDetail(p: PokemonListItem) {
+    this.router.navigate(['/detail', p.id]);
+  }
 }

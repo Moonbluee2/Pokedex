@@ -1,95 +1,163 @@
-@use '../../../theme/poke-shared' as *; /* si ya no lo usas, puedes quitarlo */
+@use '../../../theme/poke-shared' as *;
 
-/* ======== Ajustes globales del card ======== */
-:host {
-  --card-bg: var(--surface, #fff);
-  --card-shadow: var(--surface-shadow, 0 8px 24px rgba(16,24,40,.06));
-  --card-radius: var(--surface-radius, 16px);
-  --accent: var(--ion-color-primary, #e15757);
-  --text-strong: var(--text-800, #1f2937);
-  --text-soft: var(--text-600, #475569);
-  --chip-stroke: #a3a3a3; /* gris de borde para la cápsula tipo */
+/* ===== Tema ===== */
+:root {
+  --pdx-primary: #e3350d;
+  --pdx-bg: #0f1115;            /* fondo general */
+  --pdx-card: #5a5f68;          /* gris claro elegante */
+  --pdx-card-border: rgba(255,255,255,.18);
+  --pdx-shadow: 0 2px 5px rgba(0,0,0,.5);
+  --pdx-text: #f2f4f8;
 }
 
-/* lista y card */
-.poke-list { padding: 12px; }
+.pdx-toolbar { --background: var(--pdx-primary); --color: #fff; }
 
-ion-content {
-  --background: #f6f7fb;
-  --padding-start: 12px;
-  --padding-end: 12px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
+/* Fondo app */
+:host, ion-content { --background: var(--pdx-bg); }
+
+/* Quitar divisores y que todo sea bloque (una tarjeta por fila) */
+ion-list, ion-item { --ion-item-border-color: transparent; --inner-border-width: 0; }
+.pdx-list {
+  background: transparent;
+  padding: 12px;                  /* gutter lateral */
 }
 
-.poke-item {
+/* =============== CARD (1 por renglón, ancho útil completo) =============== */
+.pdx-card {
+  display: block;
+  width: 100%;
   margin: 10px 0;
+
+  /* === Estilo visual metálico gris === */
+  --background: linear-gradient(145deg, #5a5f68 0%, #3d424a 100%);
+  border: 1px solid rgba(255,255,255,.15);
   border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(16,24,40,.06);
-  --background: transparent;
-  --padding-start: 12px;
-  --inner-padding-end: 8px;
-  min-height: 74px;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 
+  /* === Espaciado equilibrado === */
+  --min-height: 80px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+  --inner-padding-start: 14px;
+  --inner-padding-end: 14px;
+  --inner-padding-top: 10px;
+  --inner-padding-bottom: 10px;
+
+  color: #f2f4f8;
+}
+
+/* Borde redondeado visible */
+.pdx-card::part(native) {
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #5a5f68 0%, #3d424a 100%);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+/* Avatar */
+.poke-avatar {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 0 3px rgba(255,255,255,.1));
+}
+
+/* Layout interno */
+.main {
+  display: block;
+  flex: 1;
+  margin-left: 10px;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.1;
+  color: #f3f3f3;
+  text-shadow: 0 1px 1px rgba(0,0,0,.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chips */
+.chips {
   display: flex;
-  align-items: center;
-}
-
-.poke-avatar img {
-  width: 44px; height: 44px; object-fit: contain;
-}
-
-.poke-label {
-  display: flex; align-items: center;
-  gap: 12px; min-height: 44px;
-}
-
-/* nombre + chips */
-.name { font-size: 15.5px; font-weight: 600; color: #1f2937; }
-.types { display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* chips pastel (ya los traes; dejo por si falta) */
-ion-chip {
-  height: 22px; border-radius: 999px; padding: 0 8px;
-  --background: #eef2f7; --color: #1f2937;
-  ion-label { font-size: 10.5px; font-weight: 700; letter-spacing: .4px; }
-}
-
-/* ===== Botones a la derecha (alineados, discretos) ===== */
-.actions {
-  display: inline-flex;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
-  margin-left: 8px;        /* separa botones del label */
+  max-width: 48vw;
 }
-
-/* botón fantasma (favorito) */
-.btn-ghost {
-  --padding-start: 6px; --padding-end: 6px;
-  --background: transparent;
-  --box-shadow: none;
-  color: #94a3b8;          /* slate-400 */
-}
-.btn-ghost:hover { color: var(--ion-color-primary); }
-
-/* botón principal info (suave, redondito) */
-.btn-primary {
-  --padding-start: 8px; --padding-end: 8px;
-  --border-radius: 12px;
-  --background: color-mix(in srgb, var(--ion-color-primary) 86%, white 14%);
-  --background-hover: color-mix(in srgb, var(--ion-color-primary) 92%, white 8%);
-  --box-shadow: 0 4px 10px rgba(0,0,0,.08);
+ion-chip {
   --color: #fff;
+  height: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.3);
 }
 
-/* iconos más pequeños para que no “pesen” */
-ion-buttons .ion-activatable, .actions ion-button {
-  height: 28px; min-height: 28px;
+/* Icono */
+ion-item ion-icon[slot="end"] {
+  color: rgba(255,255,255,.6);
+  font-size: 18px;
 }
-.actions ion-icon { font-size: 16px; }
 
-/* móvil muy chico: que el label pueda saltar a 2 líneas si no cabe */
-@media (max-width: 360px) {
-  .poke-label { flex-wrap: wrap; gap: 6px 10px; }
+ion-chip {
+  --color: #fff;                  /* texto de chip */
+  height: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 0 8px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25);
+}
+
+/* Icono flecha */
+ion-item ion-icon[slot="end"] {
+  color: rgba(231,235,243,.55);
+  font-size: 18px;
+}
+
+/* Botón inferior */
+.load-more { display: grid; place-items: center; padding: 8px 12px 16px; }
+
+/* ================== Móvil: mismo look, optimizado ================== */
+@media (max-width: 480px) {
+  .pdx-list {
+    padding-right: calc(env(safe-area-inset-right,0) + 10px);
+    padding-left:  calc(env(safe-area-inset-left,0) + 10px);
+    padding-top: 10px; padding-bottom: 12px;
+  }
+
+  .pdx-card {
+    --min-height: 76px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --inner-padding-start: 10px;
+    --inner-padding-end: 10px;
+    --inner-padding-top: 8px;
+    --inner-padding-bottom: 8px;
+    margin: 10px 0;
+  }
+
+  .poke-avatar { width: 60px; height: 60px; }
+  .row { gap: 10px; min-height: 46px; }
+  .title { font-size: .98rem; }
+  .chips { gap: 4px; max-width: 56vw; }
+  ion-chip { height: 18px; font-size: 10.5px; padding: 0 7px; }
 }
